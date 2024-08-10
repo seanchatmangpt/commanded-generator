@@ -10,7 +10,11 @@ defmodule Commanded.Generator.New do
     Event,
     EventHandler,
     ProcessManager,
-    Projection
+    Projection,
+    SupervisionTree,
+    CommandValidation,
+    CommandRouting,
+    ExternalIntegration
   }
 
   template(:new, [
@@ -59,6 +63,23 @@ defmodule Commanded.Generator.New do
     {:eex, "projection/projection.ex", :project, "lib/:app/projections/:projection.ex"}
   ])
 
+  template(:supervision_tree, [
+    {:eex, "supervision_tree/supervision_tree.ex", :project, "lib/:app/supervision_tree/:supervision_tree.ex"}
+  ])
+
+  template(:command_validation, [
+    {:eex, "command_validation/command_validation.ex", :project, "lib/:app/command_validation/:command_validation.ex"}
+  ])
+
+  template(:command_routing, [
+    {:eex, "command_routing/command_routing.ex", :project, "lib/:app/command_routing/:command_routing.ex"}
+  ])
+
+  template(:external_integration, [
+    {:eex, "external_integration/external_integration.ex", :project, "lib/:app/external_integration/:external_integration.ex"}
+  ])
+
+
   def prepare_project(%Project{app: app} = project) when not is_nil(app) do
     %Project{project | project_path: project.base_path}
     |> put_app()
@@ -99,7 +120,11 @@ defmodule Commanded.Generator.New do
         aggregates: aggregates,
         event_handlers: event_handlers,
         process_managers: process_managers,
-        projections: projections
+        projections: projections,
+        supervision_trees: supervision_trees,
+        command_validations: command_validations,
+        command_routings: command_routings,
+        external_integrations: external_integrations
       }
     } = project
 
@@ -141,6 +166,26 @@ defmodule Commanded.Generator.New do
       copy_from(project, __MODULE__, :projection)
     end
 
+    for supervision_tree <- supervision_trees do
+      project = Project.merge_binding(project, supervision_tree_binding(supervision_tree))
+      copy_from(project, __MODULE__, :supervision_tree)
+    end
+
+    for command_validation <- command_validations do
+      project = Project.merge_binding(project, command_validation_binding(command_validation))
+      copy_from(project, __MODULE__, :command_validation)
+    end
+
+    for command_routing <- command_routings do
+      project = Project.merge_binding(project, command_routing_binding(command_routing))
+      copy_from(project, __MODULE__, :command_routing)
+    end
+
+    for external_integration <- external_integrations do
+      project = Project.merge_binding(project, external_integration_binding(external_integration))
+      copy_from(project, __MODULE__, :external_integration)
+    end
+
     project
   end
 
@@ -149,7 +194,11 @@ defmodule Commanded.Generator.New do
       aggregates: [],
       event_handlers: [],
       process_managers: [],
-      projections: []
+      projections: [],
+      supervision_trees: [],
+      command_validations: [],
+      command_routings: [],
+      external_integrations: []
     )
   end
 
@@ -159,7 +208,11 @@ defmodule Commanded.Generator.New do
         aggregates: aggregates,
         event_handlers: event_handlers,
         process_managers: process_managers,
-        projections: projections
+        projections: projections,
+        supervision_trees: supervision_trees,
+        command_validations: command_validations,
+        command_routings: command_routings,
+        external_integrations: external_integrations
       }
     } = project
 
@@ -167,7 +220,11 @@ defmodule Commanded.Generator.New do
       aggregates: Enum.map(aggregates, &Enum.into(aggregate_binding(&1), %{})),
       event_handlers: Enum.map(event_handlers, &Enum.into(event_handler_binding(&1), %{})),
       process_managers: Enum.map(process_managers, &Enum.into(process_manager_binding(&1), %{})),
-      projections: Enum.map(projections, &Enum.into(projection_binding(&1), %{}))
+      projections: Enum.map(projections, &Enum.into(projection_binding(&1), %{})),
+      supervision_trees: Enum.map(supervision_trees, &Enum.into(supervision_tree_binding(&1), %{})),
+      command_validations: Enum.map(command_validations, &Enum.into(command_validation_binding(&1), %{})),
+      command_routings: Enum.map(command_routings, &Enum.into(command_routing_binding(&1), %{})),
+      external_integrations: Enum.map(external_integrations, &Enum.into(external_integration_binding(&1), %{}))
     )
   end
 
@@ -300,6 +357,61 @@ defmodule Commanded.Generator.New do
 
           %{name: name, module: module, namespace: namespace, fields: fields}
         end)
+    ]
+  end
+
+  defp supervision_tree_binding(%SupervisionTree{} = supervision_tree) do
+    %SupervisionTree{name: name, module: module} = supervision_tree
+
+    {namespace, module} = module_parts(module)
+
+    [
+      supervision_tree: Macro.underscore(module),
+      supervision_tree_name: name,
+      supervision_tree_module: module,
+      supervision_tree_namespace: namespace,
+      supervision_tree_path: Macro.underscore(namespace <> "." <> module)
+    ]
+  end
+
+  defp command_validation_binding(%CommandValidation{} = command_validation) do
+    %CommandValidation{name: name, module: module} = command_validation
+
+    {namespace, module} = module_parts(module)
+
+    [
+      command_validation: Macro.underscore(module),
+      command_validation_name: name,
+      command_validation_module: module,
+      command_validation_namespace: namespace,
+      command_validation_path: Macro.underscore(namespace <> "." <> module)
+    ]
+  end
+
+  defp command_routing_binding(%CommandRouting{} = command_routing) do
+    %CommandRouting{name: name, module: module, commands: commands} = command_routing
+    {namespace, module} = module_parts(module)
+
+    [
+      command_routing: Macro.underscore(module),
+      command_routing_name: name,
+      command_routing_namespace: namespace,
+      command_routing_module: module,
+      commands: Enum.map(commands, &command_binding(&1)),
+      command_routing_path: Macro.underscore(namespace <> "." <> module)
+    ]
+  end
+
+  defp external_integration_binding(%ExternalIntegration{} = external_integration) do
+    %ExternalIntegration{name: name, module: module, fields: fields} = external_integration
+    {namespace, module} = module_parts(module)
+
+    [
+      external_integration: Macro.underscore(module),
+      external_integration_name: name,
+      external_integration_namespace: namespace,
+      external_integration_module: module,
+      external_integration_path: Macro.underscore(namespace <> "." <> module)
     ]
   end
 

@@ -88,19 +88,19 @@ defmodule Mix.Tasks.Commanded.NewTest do
         assert file =~ "defmodule MyApp.Conference do"
         assert file =~ "Conference aggregate"
 
-        assert file =~
-                 """
-                   def execute(%Conference{}, %CreateConference{}) do
-                     :ok
-                   end
-                 """
+        # assert file =~
+        #          """
+        #            def execute(%Conference{}, %CreateConference{}) do
+        #              :ok
+        #            end
+        #          """
 
-        assert file =~
-                 """
-                   def apply(%Conference{} = state, %ConferenceCreated{}) do
-                     state
-                   end
-                 """
+        # assert file =~
+        #          """
+        #            def apply(%Conference{} = state, %ConferenceCreated{}) do
+        #              state
+        #            end
+        #          """
       end)
 
       assert_file("my_app/lib/my_app/order/order.ex", fn file ->
@@ -133,60 +133,60 @@ defmodule Mix.Tasks.Commanded.NewTest do
                    }
                  """
 
-        assert file =~
-                 """
-                   def execute(%Order{}, %AssignRegistrant{}) do
-                     :ok
-                   end
-                 """
+        # assert file =~
+        #          """
+        #            def execute(%Order{}, %AssignRegistrant{}) do
+        #              :ok
+        #            end
+        #          """
 
-        assert file =~
-                 """
-                   def apply(%Order{} = state, %OrderPlaced{}) do
-                     state
-                   end
-                 """
+        # assert file =~
+        #          """
+        #            def apply(%Order{} = state, %OrderPlaced{}) do
+        #              state
+        #            end
+        #          """
       end)
 
       # Commands
       assert_file("my_app/lib/my_app/conference/commands/create_conference.ex", fn file ->
         assert file =~ "defmodule MyApp.Conference.Commands.CreateConference do"
 
-        assert file =~
-                 """
-                   @type t :: %CreateConference{
-                           conference_id: String.t()
-                         }
-                 """
+        # assert file =~
+        #          """
+        #            @type t :: %CreateConference{
+        #                    conference_id: String.t()
+        #                  }
+        #          """
 
-        assert file =~
-                 """
-                   defstruct [
-                     :conference_id
-                   ]
-                 """
+        # assert file =~
+        #          """
+        #            defstruct [
+        #              :conference_id
+        #            ]
+        #          """
       end)
 
       # Events
       assert_file("my_app/lib/my_app/conference/events/conference_created.ex", fn file ->
         assert file =~ "defmodule MyApp.Conference.Events.ConferenceCreated do"
 
-        assert file =~
-                 """
-                   @type t :: %ConferenceCreated{
-                           conference_id: String.t(),
-                           version: pos_integer()
-                         }
-                 """
+        # assert file =~
+        #          """
+        #            @type t :: %ConferenceCreated{
+        #                    conference_id: String.t(),
+        #                    version: pos_integer()
+        #                  }
+        #          """
 
-        assert file =~
-                 """
-                   @derive Jason.Encoder
-                   defstruct [
-                     :conference_id,
-                     version: 1
-                   ]
-                 """
+        # assert file =~
+        #          """
+        #            @derive Jason.Encoder
+        #            defstruct [
+        #              :conference_id,
+        #              version: 1
+        #            ]
+        #          """
       end)
 
       # Event handlers

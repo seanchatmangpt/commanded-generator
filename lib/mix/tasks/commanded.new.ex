@@ -12,16 +12,11 @@ defmodule Mix.Tasks.Commanded.New do
   ## Options
 
     * `--app` - the name of the OTP application
-
     * `--module` - the name of the base module in the generated skeleton
-
     * `--verbose` - use verbose output
-
     * `-v`, `--version` - prints the Commanded installer version
-
-  ## Sources
-
-    * `--miro` - the Miro board id used to scaffold the Commanded application
+    * `--miro` - the Miro board ID used to scaffold the Commanded application
+    * `--json` - the path to a JSON file used to scaffold the Commanded application
 
   ## Usage
 
@@ -41,6 +36,9 @@ defmodule Mix.Tasks.Commanded.New do
 
       mix commanded.new hello_world --miro o9J_lDnyq6U=
 
+  Scaffold an application from a JSON file:
+
+      mix commanded.new hello_world --json path/to/file.json
   """
 
   use Mix.Task
@@ -61,7 +59,8 @@ defmodule Mix.Tasks.Commanded.New do
     module: :string,
     prefix: :string,
     projections: :boolean,
-    verbose: :boolean
+    verbose: :boolean,
+    json: :string
   ]
 
   @impl true
@@ -114,12 +113,18 @@ defmodule Mix.Tasks.Commanded.New do
   defp build_model(%Project{} = project) do
     %Project{app_mod: app_mod, opts: opts} = project
 
-    case Keyword.get(opts, :miro) do
-      board_id when is_binary(board_id) ->
+    case {Keyword.get(opts, :miro), Keyword.get(opts, :json)} do
+      {nil, json_file} when is_binary(json_file) ->
+        Project.build_model(project, Miro, namespace: app_mod, json_file: json_file)
+
+      {board_id, nil} when is_binary(board_id) ->
         Project.build_model(project, Miro, namespace: app_mod, board_id: board_id)
 
-      nil ->
+      {nil, nil} ->
         project
+
+      _ ->
+        Mix.raise("Cannot use both --miro and --json options simultaneously. Please choose one.")
     end
   end
 

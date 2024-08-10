@@ -7,10 +7,20 @@ defmodule Commanded.Generator.Model.Aggregate do
           module: atom(),
           fields: list(Field.t()),
           commands: list(Command.t()),
-          events: list(Event.t())
+          events: list(Event.t()),
+          command_event_map: map()
         }
 
-  defstruct [:name, :module, fields: [], commands: [], events: []]
+  defstruct [:name, :module, fields: [], commands: [], events: [], command_event_map: %{}]
+
+  # def add_command_event_mapping(
+  #       %Aggregate{} = aggregate,
+  #       %Command{name: command_name},
+  #       %Event{} = event
+  #     ) do
+  #   new_map = Map.update(aggregate.command_event_map, command_name, [event], &[event | &1])
+  #   %Aggregate{aggregate | command_event_map: new_map}
+  # end
 
   def add_command(%Aggregate{} = aggregate, %Command{} = command) do
     %Aggregate{commands: commands} = aggregate
@@ -37,4 +47,8 @@ defmodule Commanded.Generator.Model.Aggregate do
 
     %Aggregate{aggregate | events: Enum.sort_by([event | events], & &1.name)}
   end
+
+  # def get_event_for_command(%Aggregate{command_event_map: map}, command_name) do
+  #   Map.get(map, command_name)
+  # end
 end

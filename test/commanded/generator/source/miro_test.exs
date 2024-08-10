@@ -352,6 +352,30 @@ defmodule Commanded.Generator.Source.MiroTest do
              )
     end
 
+    # test "with a conduit example" do
+    #   # mock_request("boards/widgets/list_all_conduit.json")
+
+    #   {:ok, model} = Miro.build(namespace: MyApp, json_file: "test/fixtures/miro/boards/widgets/list_all_conduit.json")
+
+    #   IO.inspect(model, pretty: true)
+
+    #   assert match?(
+    #            %Model{
+    #              namespace: MyApp,
+    #              aggregates: [
+    #                %Aggregate{
+    #                  name: "Aggregate",
+    #                  module: MyApp.Aggregate,
+    #                  commands: [
+    #                    %Command{name: "Command A", module: MyApp.Aggregate.Commands.CommandA}
+    #                  ]
+    #                }
+    #              ]
+    #            },
+    #            model
+    #          )
+    # end
+
     test "with duplicates" do
       mock_request("boards/widgets/list_all_with_duplicates.json")
 

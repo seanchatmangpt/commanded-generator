@@ -361,6 +361,150 @@
       "name" : "Ben Smith",
       "id" : "3074457346439865295"
     }
-  } ],
+  } ,{
+    "id": "3074457358073027950",
+    "style": {
+      "padding": null,
+      "backgroundOpacity": null,
+      "backgroundColor": "#8ACB88",
+      "borderColor": null,
+      "borderStyle": null,
+      "borderOpacity": null,
+      "borderWidth": null,
+      "fontSize": 36,
+      "fontFamily": "OpenSans",
+      "textColor": null,
+      "textAlign": "center",
+      "textAlignVertical": "middle",
+      "shapeType": null
+    },
+    "text": "<p>Supervision Tree</p>",
+    "x": 600.0,
+    "y": -500.0,
+    "width": 199.0,
+    "height": 228.0,
+    "scale": 0.54,
+    "type": "sticker",
+    "createdAt": "2021-04-30T19:00:00Z",
+    "modifiedAt": "2021-04-30T19:00:00Z",
+    "modifiedBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    },
+    "createdBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    }
+  },{
+    "id": "3074457358073027951",
+    "style": {
+      "padding": null,
+      "backgroundOpacity": null,
+      "backgroundColor": "#FFD700",
+      "borderColor": null,
+      "borderStyle": null,
+      "borderOpacity": null,
+      "borderWidth": null,
+      "fontSize": 36,
+      "fontFamily": "OpenSans",
+      "textColor": null,
+      "textAlign": "center",
+      "textAlignVertical": "middle",
+      "shapeType": null
+    },
+    "text": "<p>Command Validation</p>",
+    "x": 800.0,
+    "y": -500.0,
+    "width": 199.0,
+    "height": 228.0,
+    "scale": 0.54,
+    "type": "sticker",
+    "createdAt": "2021-04-30T19:00:00Z",
+    "modifiedAt": "2021-04-30T19:00:00Z",
+    "modifiedBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    },
+    "createdBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    }
+  } ,{
+    "id": "3074457358073027952",
+    "style": {
+      "padding": null,
+      "backgroundOpacity": null,
+      "backgroundColor": "#87CEEB",
+      "borderColor": null,
+      "borderStyle": null,
+      "borderOpacity": null,
+      "borderWidth": null,
+      "fontSize": 36,
+      "fontFamily": "OpenSans",
+      "textColor": null,
+      "textAlign": "center",
+      "textAlignVertical": "middle",
+      "shapeType": null
+    },
+    "text": "<p>Command Routing</p>",
+    "x": 1000.0,
+    "y": -500.0,
+    "width": 199.0,
+    "height": 228.0,
+    "scale": 0.54,
+    "type": "sticker",
+    "createdAt": "2021-04-30T19:00:00Z",
+    "modifiedAt": "2021-04-30T19:00:00Z",
+    "modifiedBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    },
+    "createdBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    }
+  },{
+    "id": "3074457358073027953",
+    "style": {
+      "padding": null,
+      "backgroundOpacity": null,
+      "backgroundColor": "#FF6347",
+      "borderColor": null,
+      "borderStyle": null,
+      "borderOpacity": null,
+      "borderWidth": null,
+      "fontSize": 36,
+      "fontFamily": "OpenSans",
+      "textColor": null,
+      "textAlign": "center",
+      "textAlignVertical": "middle",
+      "shapeType": null
+    },
+    "text": "<p>External Integration</p>",
+    "x": 1200.0,
+    "y": -500.0,
+    "width": 199.0,
+    "height": 228.0,
+    "scale": 0.54,
+    "type": "sticker",
+    "createdAt": "2021-04-30T19:00:00Z",
+    "modifiedAt": "2021-04-30T19:00:00Z",
+    "modifiedBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    },
+    "createdBy": {
+      "type": "user",
+      "name": "Ben Smith",
+      "id": "3074457346439865295"
+    }
+  }],
   "size" : 11
 }

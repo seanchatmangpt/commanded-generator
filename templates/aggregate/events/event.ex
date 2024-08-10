@@ -7,13 +7,19 @@ defmodule <%= @event_namespace %>.<%= @event_module %> do
 
   @type t :: %<%= @event_module %>{
     <%= @aggregate %>_id: String.t(),
+    <%= for field <- @fields do %>
+    <%= field.field %>: term()<%= if @fields != [field], do: "," %>
+    <% end %>
     version: pos_integer()
   }
 
   @derive Jason.Encoder
   defstruct [
     :<%= @aggregate %>_id,
-    version: 1
+    <%= for field <- @fields do %>
+    :<%= field.field %><%= if @fields != [field], do: "," %>
+    <% end %>
+    version: 1,
   ]
 
   defimpl Commanded.Serialization.JsonDecoder do

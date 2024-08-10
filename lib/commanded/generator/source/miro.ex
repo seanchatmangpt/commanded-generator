@@ -8,7 +8,11 @@ defmodule Commanded.Generator.Source.Miro do
     EventHandler,
     Field,
     ProcessManager,
-    Projection
+    Projection,
+    SupervisionTree,
+    CommandValidation,
+    CommandRouting,
+    ExternalIntegration
   }
 
   alias Commanded.Generator.Source
@@ -18,21 +22,43 @@ defmodule Commanded.Generator.Source.Miro do
 
   def build(opts) do
     namespace = Keyword.fetch!(opts, :namespace)
-    board_id = Keyword.fetch!(opts, :board_id)
 
-    client = Client.new()
+    # Determine the client based on json_file or board_id
+    client =
+      if json_file = Keyword.get(opts, :json_file) do
+        Client.new(json_file: json_file)
+      else
+        # board_id = Keyword.fetch!(opts, :board_id)
+        Client.new()
+      end
 
-    with {:ok, widgets} <- Client.list_all_widgets(client, board_id) do
-      model =
-        Model.new(namespace)
-        |> include_aggregates(widgets)
-        |> include_events(widgets)
-        |> include_event_handlers(widgets)
-        |> include_process_managers(widgets)
-        |> include_projections(widgets)
-
-      {:ok, model}
+    # Fetch widgets and build the model
+    with {:ok, widgets} <- fetch_widgets(client, opts) do
+      build_model(namespace, widgets)
     end
+  end
+
+  defp fetch_widgets(client, opts) do
+    if json_file = Keyword.get(opts, :json_file) do
+      Client.list_all_widgets(client)
+    else
+      board_id = Keyword.fetch!(opts, :board_id)
+      Client.list_all_widgets(client, board_id)
+    end
+  end
+
+  defp build_model(namespace, widgets) do
+    Model.new(namespace)
+    |> include_aggregates(widgets)
+    |> include_events(widgets)
+    |> include_event_handlers(widgets)
+    |> include_process_managers(widgets)
+    |> include_projections(widgets)
+    # |> include_supervision_trees(widgets)
+    # |> include_command_validations(widgets)
+    # |> include_command_routings(widgets)
+    # |> include_external_integrations(widgets)
+    |> then(&{:ok, &1})
   end
 
   # Include aggregates and their associated commands and events.
@@ -76,7 +102,15 @@ defmodule Commanded.Generator.Source.Miro do
               Aggregate.add_command(aggregate, command)
 
             is_a?(sticker, :event) ->
-              include_aggregate_event(model, aggregate, sticker, widgets, [sticker])
+              event_aggregate =
+                include_aggregate_event(model, aggregate, sticker, widgets, [sticker])
+
+              # Here, map the command to the event
+              # Enum.each(aggregate.commands, fn command ->
+              #   aggregate = Aggregate.add_command_event_mapping(event_aggregate, command, sticker)
+              # end)
+
+              event_aggregate
 
             true ->
               aggregate
@@ -240,6 +274,82 @@ defmodule Commanded.Generator.Source.Miro do
     end)
   end
 
+  defp include_supervision_trees(%Model{} = model, widgets) do
+    %Model{namespace: namespace} = model
+
+    widgets
+    |> typeof("sticker", &is_a?(&1, :supervision_tree))
+    |> Enum.reduce(model, fn sticker, model ->
+      %{"id" => id, "text" => text} = sticker
+
+      {name} = parse_text(text)
+
+      module = Module.concat([namespace, String.replace(name, " ", "")])
+
+      supervision_tree =
+        %SupervisionTree{name: name, module: module}
+
+      Model.add_supervision_tree(model, supervision_tree)
+    end)
+  end
+
+  defp include_command_validations(%Model{} = model, widgets) do
+    %Model{namespace: namespace} = model
+
+    widgets
+    |> typeof("sticker", &is_a?(&1, :command_validation))
+    |> Enum.reduce(model, fn sticker, model ->
+      %{"id" => id, "text" => text} = sticker
+
+      {name, fields} = parse_text(text)
+
+      module = Module.concat([namespace, String.replace(name, " ", "")])
+
+      command_validation =
+        %CommandValidation{name: name, module: module, fields: fields}
+
+      Model.add_command_validation(model, command_validation)
+    end)
+  end
+
+  defp include_command_routings(%Model{} = model, widgets) do
+    %Model{namespace: namespace} = model
+
+    widgets
+    |> typeof("sticker", &is_a?(&1, :command_routing))
+    |> Enum.reduce(model, fn sticker, model ->
+      %{"id" => id, "text" => text} = sticker
+
+      {name, _fields} = parse_text(text)
+
+      module = Module.concat([namespace, String.replace(name, " ", "")])
+
+      command_routing =
+        %CommandRouting{name: name, module: module, commands: []}
+
+      Model.add_command_routing(model, command_routing)
+    end)
+  end
+
+  defp include_external_integrations(%Model{} = model, widgets) do
+    %Model{namespace: namespace} = model
+
+    widgets
+    |> typeof("sticker", &is_a?(&1, :external_integration))
+    |> Enum.reduce(model, fn sticker, model ->
+      %{"id" => id, "text" => text} = sticker
+
+      {name, fields} = parse_text(text)
+
+      module = Module.concat([namespace, String.replace(name, " ", "")])
+
+      external_integration =
+        %ExternalIntegration{name: name, module: module, fields: fields}
+
+      Model.add_external_integration(model, external_integration)
+    end)
+  end
+
   defp referenced_events(%Model{} = model, widgets, id) do
     widgets
     |> connected_to(id, "sticker", &is_a?(&1, :event))
@@ -262,6 +372,10 @@ defmodule Commanded.Generator.Source.Miro do
   defp is_a?(%{"style" => %{"backgroundColor" => "#ea94bb"}}, :event_handler), do: true
   defp is_a?(%{"style" => %{"backgroundColor" => "#be88c7"}}, :process_manager), do: true
   defp is_a?(%{"style" => %{"backgroundColor" => "#d5f692"}}, :projection), do: true
+  defp is_a?(%{"style" => %{"backgroundColor" => "#8bde72"}}, :supervision_tree), do: true
+  defp is_a?(%{"style" => %{"backgroundColor" => "#82b1ff"}}, :command_validation), do: true
+  defp is_a?(%{"style" => %{"backgroundColor" => "#ff8a80"}}, :command_routing), do: true
+  defp is_a?(%{"style" => %{"backgroundColor" => "#bdbdbd"}}, :external_integration), do: true
   defp is_a?(_widget, _type), do: false
 
   # Extract the name and optional fields from a sticker's text.

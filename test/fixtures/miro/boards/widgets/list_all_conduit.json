@@ -1,0 +1,277 @@
+{
+  "type": "collection",
+  "data": [
+    {
+      "id": "aggregate_user",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#f5d128"
+      },
+      "text": "<p>User</p><p>- username</p><p>- email</p><p>- hashed_password</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "command_register_user",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#a6ccf5"
+      },
+      "text": "<p>Register User</p><p>- username</p><p>- email</p><p>- password</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "event_user_registered",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#ff9d48"
+      },
+      "text": "<p>User Registered</p><p>- user_uuid</p><p>- username</p><p>- email</p><p>- hashed_password</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "projection_user",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#d5f692"
+      },
+      "text": "<p>User</p><p>- user_uuid</p><p>- username</p><p>- email</p><p>- hashed_password</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "projector_user",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#ea94bb"
+      },
+      "text": "<p>User</p><p>- user_uuid</p><p>- username</p><p>- email</p><p>- hashed_password</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "aggregate_article",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#f5d128"
+      },
+      "text": "<p>Article</p><p>- slug</p><p>- title</p><p>- description</p><p>- body</p><p>- tag_list</p><p>- author_uuid</p><p>- author_username</p><p>- author_bio</p><p>- author_image</p>"
+    },
+    {
+      "id": "aggregate_author",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#f5d128"
+      },
+      "text": "<p>Author</p><p>- author_uuid</p><p>- user_uuid</p><p>- username</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "command_create_author",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#a6ccf5"
+      },
+      "text": "<p>Create Author</p><p>- user_uuid</p><p>- username</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "command_publish_article",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#a6ccf5"
+      },
+      "text": "<p>Publish Article</p><p>- slug</p><p>- title</p><p>- description</p><p>- body</p><p>- tag_list</p><p>- author_uuid</p><p>- author_username</p><p>- author_bio</p><p>- author_image</p>"
+    },
+    {
+      "id": "event_author_created",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#ff9d48"
+      },
+      "text": "<p>Author Created</p><p>- author_uuid</p><p>- user_uuid</p><p>- username</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "event_article_published",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#ff9d48"
+      },
+      "text": "<p>Article Published</p><p>- article_uuid</p><p>- slug</p><p>- title</p><p>- description</p><p>- body</p><p>- tag_list</p><p>- author_uuid</p><p>- author_username</p><p>- author_bio</p><p>- author_image</p>"
+    },
+    {
+      "id": "projection_author",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#d5f692"
+      },
+      "text": "<p>Author</p><p>- author_uuid</p><p>- user_uuid</p><p>- username</p><p>- bio</p><p>- image</p>"
+    },
+    {
+      "id": "projection_article",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#d5f692"
+      },
+      "text": "<p>Article</p><p>- article_uuid</p><p>- slug</p><p>- title</p><p>- description</p><p>- body</p><p>- tag_list</p><p>- author_uuid</p><p>- author_username</p><p>- author_bio</p><p>- author_image</p>"
+    },
+    {
+      "id": "projector_article",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#ea94bb"
+      },
+      "text": "<p>Article</p><p>- article_uuid</p><p>- slug</p><p>- title</p><p>- description</p><p>- body</p><p>- tag_list</p><p>- author_uuid</p><p>- author_username</p><p>- author_bio</p><p>- author_image</p>"
+    },
+    {
+      "id": "workflow_create_author_from_user",
+      "type": "sticker",
+      "style": {
+        "backgroundColor": "#be88c7"
+      },
+      "text": "<p>Create Author from User</p><p>- user_uuid</p><p>- author_uuid</p>"
+    },
+    {
+      "id": "command_register_user_to_aggregate_user",
+      "type": "line",
+      "startWidget": {
+        "id": "command_register_user"
+      },
+      "endWidget": {
+        "id": "aggregate_user"
+      }
+    },
+    {
+      "id": "aggregate_user_to_event_user_registered",
+      "type": "line",
+      "startWidget": {
+        "id": "aggregate_user"
+      },
+      "endWidget": {
+        "id": "event_user_registered"
+      }
+    },
+    {
+      "id": "event_user_registered_to_projection_user",
+      "type": "line",
+      "startWidget": {
+        "id": "event_user_registered"
+      },
+      "endWidget": {
+        "id": "projection_user"
+      }
+    },
+    {
+      "id": "event_user_registered_to_projector_user",
+      "type": "line",
+      "startWidget": {
+        "id": "event_user_registered"
+      },
+      "endWidget": {
+        "id": "projector_user"
+      }
+    },
+    {
+      "id": "command_create_author_to_aggregate_author",
+      "type": "line",
+      "startWidget": {
+        "id": "command_create_author"
+      },
+      "endWidget": {
+        "id": "aggregate_author"
+      }
+    },
+    {
+      "id": "command_publish_article_to_aggregate_article",
+      "type": "line",
+      "startWidget": {
+        "id": "command_publish_article"
+      },
+      "endWidget": {
+        "id": "aggregate_article"
+      }
+    },
+    {
+      "id": "aggregate_author_to_event_author_created",
+      "type": "line",
+      "startWidget": {
+        "id": "aggregate_author"
+      },
+      "endWidget": {
+        "id": "event_author_created"
+      }
+    },
+    {
+      "id": "aggregate_article_to_event_article_published",
+      "type": "line",
+      "startWidget": {
+        "id": "aggregate_article"
+      },
+      "endWidget": {
+        "id": "event_article_published"
+      }
+    },
+    {
+      "id": "event_author_created_to_projection_author",
+      "type": "line",
+      "startWidget": {
+        "id": "event_author_created"
+      },
+      "endWidget": {
+        "id": "projection_author"
+      }
+    },
+    {
+      "id": "event_article_published_to_projection_article",
+      "type": "line",
+      "startWidget": {
+        "id": "event_article_published"
+      },
+      "endWidget": {
+        "id": "projection_article"
+      }
+    },
+    {
+      "id": "event_article_published_to_projector_article",
+      "type": "line",
+      "startWidget": {
+        "id": "event_article_published"
+      },
+      "endWidget": {
+        "id": "projector_article"
+      }
+    },
+    {
+      "id": "workflow_create_author_from_user_to_command_create_author",
+      "type": "line",
+      "startWidget": {
+        "id": "event_user_registered"
+      },
+      "endWidget": {
+        "id": "workflow_create_author_from_user"
+      }
+    },
+    {
+      "id": "command_register_user_to_event_user_registered",
+      "type": "line",
+      "startWidget": {
+        "id": "command_register_user"
+      },
+      "endWidget": {
+        "id": "event_user_registered"
+      }
+    },
+    {
+      "id": "command_create_author_to_event_author_created",
+      "type": "line",
+      "startWidget": {
+        "id": "command_create_author"
+      },
+      "endWidget": {
+        "id": "event_author_created"
+      }
+    },
+    {
+      "id": "command_publish_article_to_event_article_published",
+      "type": "line",
+      "startWidget": {
+        "id": "command_publish_article"
+      },
+      "endWidget": {
+        "id": "event_article_published"
+      }
+    }
+    
+  ],
+  "size": 29
+}
